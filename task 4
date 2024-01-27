@@ -1,0 +1,71 @@
+using System;
+
+class KnightMove
+{
+    static int boardSize = 8;
+    static int[,] board = new int[boardSize, boardSize];
+    static Random random = new Random();
+
+    static void Main(string[] args)
+    {
+        int knightRow = random.Next(boardSize);
+        int knightCol = random.Next(boardSize);
+        MoveKnight(knightRow, knightCol);
+        Console.ReadLine();
+    }
+
+    static void MoveKnight(int row, int col)
+    {
+        board[row, col] = 1;
+
+        int[] moveX = { 2, 1, -1, -2, -2, -1, 1, 2 };
+        int[] moveY = { 1, 2, 2, 1, -1, -2, -2, -1 };
+        ShuffleMoves(moveX, moveY);
+
+        for (int i = 0; i < 8; i++)
+        {
+            int newRow = row + moveX[i];
+            int newCol = col + moveY[i];
+
+            if (IsValidMove(newRow, newCol))
+            {
+                board[newRow, newCol] = 1;
+                PrintBoard();
+                return;
+            }
+        }
+    }
+
+    static bool IsValidMove(int row, int col)
+    {
+        return row >= 0 && row < boardSize && col >= 0 && col < boardSize && board[row, col] == 0;
+    }
+
+    static void ShuffleMoves(int[] moveX, int[] moveY)
+    {
+        int n = moveX.Length;
+        for (int i = 0; i < n; i++)
+        {
+            int randomIndex = random.Next(i, n);
+            int tempX = moveX[randomIndex];
+            int tempY = moveY[randomIndex];
+            moveX[randomIndex] = moveX[i];
+            moveY[randomIndex] = moveY[i];
+            moveX[i] = tempX;
+            moveY[i] = tempY;
+        }
+    }
+
+    static void PrintBoard()
+    {
+        for (int i = 0; i < boardSize; i++)
+        {
+            for (int j = 0; j < boardSize; j++)
+            {
+                Console.Write(board[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine();
+    }
+}
