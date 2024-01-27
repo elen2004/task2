@@ -1,0 +1,52 @@
+using System;
+
+class QueenMoves
+{
+    static void Main(string[] args)
+    {
+        int[,] board = new int[8, 8];
+        int queenRow = 3;
+        int queenCol = 4;
+        board[queenRow, queenCol] = 1;
+        DisplayBoard(board);
+        Console.WriteLine("\nPossible Queen Moves:");
+        CalculateQueenMoves(board, queenRow, queenCol);
+        Console.ReadLine();
+    }
+
+    static void DisplayBoard(int[,] board)
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                Console.Write(board[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+    }
+
+    static void CalculateQueenMoves(int[,] board, int row, int col)
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (i != row)
+                Console.WriteLine("(" + i + "," + col + ")");
+            if (i != col)
+                Console.WriteLine("(" + row + "," + i + ")");
+        }
+
+        int[,] directions = { { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 } };
+        for (int i = 0; i < directions.GetLength(0); i++)
+        {
+            int r = row + directions[i, 0];
+            int c = col + directions[i, 1];
+            while (r >= 0 && r < 8 && c >= 0 && c < 8)
+            {
+                Console.WriteLine("(" + r + "," + c + ")");
+                r += directions[i, 0];
+                c += directions[i, 1];
+            }
+        }
+    }
+}
