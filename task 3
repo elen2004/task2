@@ -1,0 +1,54 @@
+using System;
+
+class NQueens
+{
+    static int N = 8;
+    static int[] queens = new int[N];
+
+    static void Main(string[] args)
+    {
+        PlaceQueens(0);
+        Console.ReadLine();
+    }
+
+    static void PlaceQueens(int row)
+    {
+        if (row == N)
+        {
+            PrintBoard();
+            return;
+        }
+
+        for (int col = 0; col < N; col++)
+        {
+            if (IsSafe(row, col))
+            {
+                queens[row] = col;
+                PlaceQueens(row + 1);
+            }
+        }
+    }
+
+    static bool IsSafe(int row, int col)
+    {
+        for (int i = 0; i < row; i++)
+        {
+            if (queens[i] == col || queens[i] - i == col - row || queens[i] + i == col + row)
+                return false;
+        }
+        return true;
+    }
+
+    static void PrintBoard()
+    {
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < N; j++)
+            {
+                Console.Write(queens[i] == j ? "Q " : ". ");
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine();
+    }
+}
