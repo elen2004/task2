@@ -1,0 +1,93 @@
+using System;
+
+class Program
+{
+    static int[,] board;
+    static int size = 8;
+
+    static void Main(string[] args)
+    {
+        InitializeBoard();
+        MoveKnight();
+        DisplayBoard();
+    }
+
+    static void InitializeBoard()
+    {
+        board = new int[size, size];
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                board[i, j] = 0;
+            }
+        }
+    }
+
+    static void MoveKnight()
+    {
+        int[] dx = { 2, 1, -1, -2, -2, -1, 1, 2 };
+        int[] dy = { 1, 2, 2, 1, -1, -2, -2, -1 };
+
+        int x = 0;
+        int y = 0;
+        board[x, y] = 1;
+
+        for (int i = 1; i < size * size; i++)
+        {
+            int minMoves = int.MaxValue;
+            int nextX = -1;
+            int nextY = -1;
+
+            for (int j = 0; j < 8; j++)
+            {
+                int newX = x + dx[j];
+                int newY = y + dy[j];
+
+                if (newX >= 0 && newX < size && newY >= 0 && newY < size && board[newX, newY] == 0)
+                {
+                    int moves = CountPossibleMoves(newX, newY);
+                    if (moves < minMoves)
+                    {
+                        minMoves = moves;
+                        nextX = newX;
+                        nextY = newY;
+                    }
+                }
+            }
+
+            board[nextX, nextY] = i + 1;
+            x = nextX;
+            y = nextY;
+        }
+    }
+
+    static int CountPossibleMoves(int x, int y)
+    {
+        int count = 0;
+        int[] dx = { 2, 1, -1, -2, -2, -1, 1, 2 };
+        int[] dy = { 1, 2, 2, 1, -1, -2, -2, -1 };
+
+        for (int i = 0; i < 8; i++)
+        {
+            int newX = x + dx[i];
+            int newY = y + dy[i];
+            if (newX >= 0 && newX < size && newY >= 0 && newY < size && board[newX, newY] == 0)
+                count++;
+        }
+
+        return count;
+    }
+
+    static void DisplayBoard()
+    {
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                Console.Write(board[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+    }
+}
