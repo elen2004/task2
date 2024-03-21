@@ -1,0 +1,85 @@
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        double a = 1, b = -3, c = 2;
+
+        // Method 1: With ref parameters
+        double x1 = 0, x2 = 0;
+        SolveQuadraticRef(a, b, c, ref x1, ref x2);
+        Console.WriteLine($"Method 1 - With ref parameters: x1 = {x1}, x2 = {x2}");
+
+        // Method 2: With Tuple
+        var solutionsTuple = SolveQuadraticTuple(a, b, c);
+        Console.WriteLine($"Method 2 - With Tuple: x1 = {solutionsTuple.Item1}, x2 = {solutionsTuple.Item2}");
+
+        // Method 3: With Array
+        double[] solutionsArray = SolveQuadraticArray(a, b, c);
+        Console.WriteLine($"Method 3 - With Array: x1 = {solutionsArray[0]}, x2 = {solutionsArray[1]}");
+
+        // Method 4: With Deconstructing in class
+        var solutionsClass = new QuadraticSolver(a, b, c);
+        (double deconstructedX1, double deconstructedX2) = solutionsClass.SolveQuadraticDeconstruct();
+        Console.WriteLine($"Method 4 - With Deconstructing in class: x1 = {deconstructedX1}, x2 = {deconstructedX2}");
+    }
+
+    static void SolveQuadraticRef(double a, double b, double c, ref double x1, ref double x2)
+    {
+        double discriminant = b * b - 4 * a * c;
+        if (discriminant >= 0)
+        {
+            x1 = (-b + Math.Sqrt(discriminant)) / (2 * a);
+            x2 = (-b - Math.Sqrt(discriminant)) / (2 * a);
+        }
+    }
+
+    static (double, double) SolveQuadraticTuple(double a, double b, double c)
+    {
+        double discriminant = b * b - 4 * a * c;
+        if (discriminant >= 0)
+        {
+            double x1 = (-b + Math.Sqrt(discriminant)) / (2 * a);
+            double x2 = (-b - Math.Sqrt(discriminant)) / (2 * a);
+            return (x1, x2);
+        }
+        return (0, 0);
+    }
+
+    static double[] SolveQuadraticArray(double a, double b, double c)
+    {
+        double[] solutions = new double[2];
+        double discriminant = b * b - 4 * a * c;
+        if (discriminant >= 0)
+        {
+            solutions[0] = (-b + Math.Sqrt(discriminant)) / (2 * a);
+            solutions[1] = (-b - Math.Sqrt(discriminant)) / (2 * a);
+        }
+        return solutions;
+    }
+
+    class QuadraticSolver
+    {
+        private double a, b, c;
+
+        public QuadraticSolver(double a, double b, double c)
+        {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        }
+
+        public (double, double) SolveQuadraticDeconstruct()
+        {
+            double discriminant = b * b - 4 * a * c;
+            if (discriminant >= 0)
+            {
+                double x1 = (-b + Math.Sqrt(discriminant)) / (2 * a);
+                double x2 = (-b - Math.Sqrt(discriminant)) / (2 * a);
+                return (x1, x2);
+            }
+            return (0, 0);
+        }
+    }
+}
