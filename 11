@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+
+namespace ChessGame
+{
+    public partial class MainWindow : Window
+    {
+        private List<Piece> whitePieces = new List<Piece>();
+        private List<Piece> blackPieces = new List<Piece>();
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            InitializeBoard();
+        }
+
+        private void InitializeBoard()
+        {
+            whitePieces.Add(new Piece { Type = PieceType.King, Color = PieceColor.White });
+            whitePieces.Add(new Piece { Type = PieceType.Queen, Color = PieceColor.White });
+            blackPieces.Add(new Piece { Type = PieceType.King, Color = PieceColor.Black });
+            blackPieces.Add(new Piece { Type = PieceType.Queen, Color = PieceColor.Black });
+            blackPieces.Add(new Piece { Type = PieceType.Knight, Color = PieceColor.Black });
+            blackPieces.Add(new Piece { Type = PieceType.Rook, Color = PieceColor.Black });
+        }
+
+        private void MakeMoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 1. Win by eating white's king
+            var attackMove = blackPieces.FirstOrDefault(p => p.Type != PieceType.King && p.CanAttack(whitePieces.First(p => p.Type == PieceType.King)));
+            if (attackMove != null)
+            {
+                MessageBox.Show($"Black {attackMove.Type} eats white King.");
+                return;
+            }
+
+            // 2. Declare check if possible
+            var checkMove = blackPieces.FirstOrDefault(p => p.CanAttack(whitePieces.First(p => p.Type == PieceType.King)));
+            if (checkMove != null)
+            {
+                MessageBox.Show("Check!");
+                return;
+            }
+
+            // 3. Make a random permissible move
+            var random = new Random();
+            var validMoves = blackPieces.SelectMany(p => p.GetValidMoves()).ToList();
+            var randomMove = validMoves[random.Next(validMoves.Count)];
+            MessageBox.Show($"Black {randomMove.Piece.Type} moves to {randomMove.Destination}");
+        }
+    }
+
+    public enum PieceType { King, Queen, Knight, Rook }
+    public enum PieceColor { White, Black }
+
+    public class Piece
+    {
+        public PieceType Type { get; set; }
+        public PieceColor Color { get; set; }
+
+        public bool CanAttack(Piece targetPiece)
+        {
+            // Simulate logic for determining if this piece can attack the target piece
+            return true;
+        }
+
+        public List<string> GetValidMoves()
+        {
+            // Simulate logic for determining valid moves for this piece
+            return new List<string> { "A1", "B2", "C3" };
+        }
+    }
+}
